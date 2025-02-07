@@ -44,6 +44,7 @@ async function checkUrl(url: string) {
     responseTime,
     headers: response.headers,
     message: response.statusText,
+    data: response?.data,
     protocol: url.startsWith('https') ? 'https' : 'http'
   }
 }

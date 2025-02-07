@@ -1,26 +1,14 @@
 <template>
   <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4 text-emerald-500">网站状态监控: <a :href='domain' target="_blank">{{ domain }}</a></h1>
+    <h1 class="text-2xl font-bold mb-4 text-emerald-500">网站状态监控: <a href='/'>{{ domain }}</a></h1>
     
     <div class="mb-4 text-sm text-gray-600">
-      下次更新时间: {{ countdown }} 秒
+      下次更新时间: {{ countdown }} 秒 
     </div>
     
-    <div v-if="error" class="bg-red-100 p-4 rounded mb-4">
-      <p class="text-red-600">{{ error }}</p>
-    </div>
-    
-    <div class="grid gap-4">
-      <div class="bg-white p-4 rounded shadow text-sm font-blod">
-        <h2 class="font-bold mb-2">当前状态</h2>
-        <p :class="currentStatus?.statusCode === 500 ? 'text-red-600': 'text-emerald-600'" >状态码: {{ currentStatus?.statusCode }}</p>
-        <p>响应时间: {{ currentStatus?.responseTime }}ms</p>
-        <p>状态信息: {{ currentStatus?.message }}</p>
-      </div>
-      
-      <div class="bg-white p-4 rounded shadow text-sm">
+    <div class="bg-white p-4 rounded shadow text-sm mb-4">
         <h2 class="font-bold mb-2">Response time</h2>
-        <select  v-model="timeRange" class="mb-4 border rounded text-sm" @change="handleTimeRangeChange">
+        <select  v-model="timeRange" class="mb-4 border rounded text-lg text-xs" @change="handleTimeRangeChange">
           <option value="1">1分钟</option>
           <option value="5">5分钟</option>
           <option value="30">30分钟</option>
@@ -31,6 +19,26 @@
           </ClientOnly>
         </div>
       </div>
+    
+    <div class="grid gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded shadow font-blod">
+        <h2 class="font-bold mb-2">当前状态</h2>
+        <div class="text-sm">
+          <p :class="currentStatus?.statusCode === 500 ? 'text-red-600': 'text-emerald-600'" >状态码: {{ currentStatus?.statusCode }}</p>
+          <p>响应时间: {{ currentStatus?.responseTime }}ms</p>
+          <p>状态信息: {{ currentStatus?.message }}</p>
+        </div>
+      </div>
+      
+      <div class="bg-white p-4 rounded shadow text-sm">
+        <h2 class="font-bold mb-2">Response Headers</h2>
+        <div class="bg-gray-50 p-4 rounded-lg overflow-x-auto">
+          <pre class="whitespace-pre-wrap break-words font-mono text-gray-700">{{ JSON.stringify(currentStatus?.headers, null, 2) }}</pre>
+        </div>
+      </div>
+      </div>
+      
     </div>
   </div>
 </template>
@@ -49,8 +57,8 @@ const { saveStatus, getStatusHistory } = useIndexDB()
 // 获取状态并更新数据
 const fetchStatus = async () => {
   try {
-    const { data } = await useFetch(`/api/check-status/${(domain.value)}`)
-    currentStatus.value = data.value
+    const { data, status } = await useFetch(`/api/check-status/${(domain.value)}`)
+    currentStatus.value = {...data.value, status}
     if (data.value) {
       await saveStatus(
         domain.value,

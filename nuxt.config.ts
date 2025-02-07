@@ -4,7 +4,12 @@ export default defineNuxtConfig({
   ssr: true,
 
   nitro: {
-    preset: 'node-server'
+    preset: 'node-server',
+    output: {
+      dir: './dist',  // Specify the output directory
+      serverDir: './dist/server',
+      publicDir: './dist/public'
+    }
   },
 
   compatibilityDate: '2025-01-24'

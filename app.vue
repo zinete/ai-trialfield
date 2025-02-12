@@ -1,9 +1,13 @@
 <template>
   <div>
-    <NuxtHead>
-      <title>WebPulse | Status Check</title>
-    </NuxtHead>
-   
-    <NuxtPage />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </div>
 </template>
+
+<script setup>
+useHead({
+  title: 'WebPulse | Status Check'
+})
+</script>

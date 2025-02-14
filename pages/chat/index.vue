@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-screen bg-gray-100">
+  <div class="flex flex-col h-screen ">
 
     <!-- 聊天记录区域 -->
     <div ref="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-4">
@@ -48,13 +48,14 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore 暂时忽略类型检查，后续需要安装 @types/markdown-it
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 
 // 初始化 markdown-it
 const md = new MarkdownIt({
-  highlight: function (str, lang) {
+  highlight: function (str: string, lang: string) {
     if (lang && hljs.getLanguage(lang)) {
       try {
         return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang, ignoreIllegals: true }).value}</code></pre>`
@@ -134,7 +135,7 @@ const sendMessage = async () => {
     const aiMessage = {
       role: 'assistant',
       content: data.value?.data?.message?.content || '抱歉，我现在无法回答。'
-    }
+    } as Message
     messages.value.push(aiMessage)
     
     // 开始打字机效果

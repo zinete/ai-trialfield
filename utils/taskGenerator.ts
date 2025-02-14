@@ -50,15 +50,13 @@ export function generateTasks(taskTemplates: TaskTemplate[], totalDays: number =
   
   return tasks
 }
-
-// 计算目标达成时间
 export function calculateTargetDate(startDate: Date, days: number) {
-    const targetDate = new Date(startDate)
-    targetDate.setDate(targetDate.getDate() + days - 1) // 减1是因为开始日期算第一天
-    
-    return new Intl.DateTimeFormat('zh-CN', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }).format(targetDate)
-  }
+  const targetDate = new Date(startDate)
+  targetDate.setDate(targetDate.getDate() + days - 1) // 减1是因为开始日期算第一天
+  
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(targetDate)
+}

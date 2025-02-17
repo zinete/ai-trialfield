@@ -1,10 +1,16 @@
 // 任务频率规则配置
 export const frequencyRules = {
+  // 每天执行的任务
   daily: () => true,
+  // 每周一执行的任务（每7天一次，从第1天开始）
   weekly: (day: number) => day % 7 === 1,
+  // 隔天执行的任务（奇数天执行）
   alternate: (day: number) => day % 2 === 1,
+  // 工作日执行的任务（周一至周五）
   workday: (day: number) => day % 7 !== 0 && day % 7 !== 6,
+  // 周末执行的任务（周六和周日）
   weekend: (day: number) => day % 7 === 0 || day % 7 === 6,
+  // 每周三次的任务（周一、周三、周五）
   threeTimesPerWeek: (day: number) => [1, 3, 5].includes(day % 7)
 } as const
 

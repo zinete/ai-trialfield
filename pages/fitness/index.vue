@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto p-4 max-w-4xl">
     
-  
+    
     <h1 class="text-2xl font-bold text-gray-800 mb-6">{{ totalDays }}天计划</h1>
 
     <!-- 添加日期选择器 -->
@@ -21,22 +21,29 @@
         :disabled="!canGoNext" :title="!canGoNext ? '已经是最后一天了' : ''">
         后一天 →
       </button>
+     <div>
+      
+      <NuxtLink class="text-green-700" to="/fitness/ai-chat">和健康小管家聊天</NuxtLink>
+     </div>
     </div>
 
     <div class="grid md:grid-cols-2 gap-6">
       <PersonCard v-for="person in persons" :key="person.name" :person="person" :selected-date="selectedDate"
         :start-date="startDate" :total-days="totalDays" :calculate-target-date="calculateTargetDate"
         :get-day-number="getDayNumber" />
+
+       
     </div>
 
-
-
+   
+   
 
   </div>
 </template>
 
 <script setup lang="ts">
 import PersonCard, {type Person} from '../../components/PersonCard.vue'
+
 
 
 import { computed, ref, watch, onMounted } from 'vue'
@@ -80,7 +87,6 @@ const canGoPrev = computed(() => getDayNumber(selectedDate.value) > 1)
 const canGoNext = computed(() => getDayNumber(selectedDate.value) < totalDays.value)
 
 
-
 // 获取指定日期是第几天
 function getDayNumber(date: Date) {
   const diff = date.getTime() - startDate.value.getTime()
@@ -110,11 +116,7 @@ function calculateDayProgress(person: Person, date: Date) {
   return Math.round((completed / tasks.length) * 100)
 }
 
-// 计算总体进度
-function calculateTotalProgress(person: Person) {
-  const completed = person.tasks.filter(task => task.completed).length
-  return Math.round((completed / person.tasks.length) * 100)
-}
+
 
 // 日期导航
 function prevDay() {
@@ -160,9 +162,10 @@ onMounted(() => {
         emoji: "💪",
         goal: "减重 3kg",
         tasks: generateTasks([
-          { content: "HIIT 训练 20 分钟", frequency: "daily" },
-          { content: "瑜伽 30 分钟", frequency: "daily" },
-          { content: "健步 5000 步", frequency: "daily" }
+          { content: "呼啦圈 2000个", frequency: "daily" },
+          { content: "开合跳 200个", frequency: "daily" },
+          { content: "高抬腿 300个", frequency: "daily"},
+          { content: "跳绳 2500个", frequency: "daily" },
         ], totalDays.value)
       }
     ]

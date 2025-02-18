@@ -3,9 +3,10 @@
 import axios from 'axios'
 
 export default defineEventHandler(async (event) => {
+    const config = useRuntimeConfig()
     const axiosInstance = axios.create({
         timeout: 30000,
-        baseURL: 'https://api.siliconflow.cn/v1'
+        baseURL: config.apiBaseUrl
     })
     const {  history } = await readBody(event)
 
@@ -19,7 +20,7 @@ export default defineEventHandler(async (event) => {
     
     try {
         const res = await axiosInstance.post('/chat/completions', {
-            model: 'Qwen/Qwen2-VL-72B-Instruct',
+            model: config.aiModel,
             // frequency_penalty: 0,
             // max_tokens: 8192,
             // temperature: 0.7,

@@ -23,7 +23,7 @@
       </button>
      <div>
       
-      <NuxtLink class="text-green-700" to="/fitness/ai-chat">和健康小管家聊天</NuxtLink>
+      <NuxtLink class="text-green-700" to="/fitness/ai-chat">🤖 和健康小管家聊天</NuxtLink>
      </div>
     </div>
 
@@ -98,7 +98,8 @@ function formatDate(date: Date) {
   return new Intl.DateTimeFormat('zh-CN', {
     month: 'long',
     day: 'numeric',
-    weekday: 'long'
+    weekday: 'long',
+    timeZone: 'Asia/Shanghai'
   }).format(date)
 }
 
@@ -141,9 +142,9 @@ onMounted(() => {
   if (saved) {
     const data = JSON.parse(saved)
     persons.value = data.persons
-    startDate.value = new Date(data.startDate)
+
   } else {
-    startDate.value = new Date()
+    // startDate.value = new Date()
     // 初次创建时生成任务
     persons.value = [
       {
@@ -171,7 +172,7 @@ onMounted(() => {
     ]
   }
   // 确保选中日期与开始日期一致
-  selectedDate.value = new Date(startDate.value)
+  // selectedDate.value = new Date(startDate.value)
 })
 
 

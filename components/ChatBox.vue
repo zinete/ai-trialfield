@@ -1,28 +1,43 @@
 <template>
   <div class="flex flex-col h-[calc(100vh-200px)] bg-gray-50 rounded-lg">
     <!-- 聊天记录区域 -->
-    <div 
-      ref="chatContainer" 
+    <div
+      ref="chatContainer"
       class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth"
       @scroll="handleScroll"
     >
       <TransitionGroup name="message" tag="div" class="space-y-4">
-        <div v-for="(message, index) in messages" :key="index" class="flex flex-col space-y-2">
+        <div
+          v-for="(message, index) in messages"
+          :key="index"
+          class="flex flex-col space-y-2"
+        >
           <!-- 用户消息 -->
-          <div v-if="message.role === 'user'" class="flex justify-end items-start space-x-2">
-            <div class="bg-emerald-500 text-white text-sm p-3 rounded-2xl rounded-tr-sm max-w-[80%] shadow-sm hover:shadow-md transition-shadow duration-200">
+          <div
+            v-if="message.role === 'user'"
+            class="flex justify-end items-start space-x-2"
+          >
+            <div
+              class="bg-emerald-500 text-white text-sm p-3 rounded-2xl rounded-tr-sm max-w-[80%] shadow-sm hover:shadow-md transition-shadow duration-200"
+            >
               {{ message.content }}
             </div>
-            <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0">
+            <div
+              class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0"
+            >
               👤
             </div>
           </div>
           <!-- AI 回复 -->
           <div v-else class="flex justify-start items-start space-x-2">
-            <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white flex-shrink-0">
+            <div
+              class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white flex-shrink-0"
+            >
               🤖
             </div>
-            <div class="bg-white p-4 rounded-2xl rounded-tl-sm max-w-[80%] shadow-sm hover:shadow-md transition-all duration-200 markdown-body">
+            <div
+              class="bg-white p-4 rounded-2xl rounded-tl-sm max-w-[80%] shadow-sm hover:shadow-md transition-all duration-200 markdown-body"
+            >
               <span v-if="index === messages.length - 1 && isTyping">
                 <span v-html="renderedText"></span>
                 <span class="typing-cursor">▋</span>
@@ -62,15 +77,40 @@
         <button
           @click="sendMessage"
           :disabled="isLoading"
-          class="px-6 py-3 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 disabled:opacity-50 transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center gap-2"
+          class="px-6 xl:py-3 py-1 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 disabled:opacity-50 transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center gap-2"
         >
-          <span>{{ isLoading ? 'AI思考中...' : '发送' }}</span>
-          <svg v-if="!isLoading" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+          <!-- <span>{{ isLoading ? "AI思考中..." : "发送" }}</span> -->
+          <svg
+            v-if="!isLoading"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"
+            />
           </svg>
-          <svg v-else class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          <svg
+            v-else
+            class="animate-spin h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
           </svg>
         </button>
       </div>
@@ -80,78 +120,74 @@
 
 <script setup lang="ts">
 // @ts-ignore
-import MarkdownIt from 'markdown-it'
+import MarkdownIt from "markdown-it";
 // @ts-ignore
-import mk from 'markdown-it-katex'
-import hljs from 'highlight.js'
-import 'highlight.js/styles/github.css'
-import 'katex/dist/katex.min.css'
-import { ref, watch, nextTick } from 'vue'
+import mk from "markdown-it-katex";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css";
+import "katex/dist/katex.min.css";
+import { ref, watch, nextTick } from "vue";
 
 const props = defineProps<{
-  userProfile?: any
-}>()
+  userProfile?: any;
+}>();
 
 const md = new MarkdownIt({
   highlight: function (str: string, lang: string) {
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang, ignoreIllegals: true }).value}</code></pre>`
+        return `<pre class="hljs"><code>${
+          hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
+        }</code></pre>`;
       } catch (__) {}
     }
-    return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`
+    return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
   },
   breaks: true,
   linkify: true,
-  html: true
-}).use(mk)
+  html: true,
+}).use(mk);
 
 interface Message {
-  role: 'user' | 'assistant'
-  content: string
+  role: "user" | "assistant";
+  content: string;
 }
 
-const messages = ref<Message[]>([])
-const inputMessage = ref('')
-const isLoading = ref(false)
-const isTyping = ref(false)
-const displayText = ref('')
-const chatContainer = ref<HTMLElement | null>(null)
-const renderedText = ref('')
-const shouldAutoScroll = ref(true)
+const messages = ref<Message[]>([]);
+const inputMessage = ref("");
+const isLoading = ref(false);
+const isTyping = ref(false);
+const displayText = ref("");
+const chatContainer = ref<HTMLElement | null>(null);
+const renderedText = ref("");
+const shouldAutoScroll = ref(true);
 
-const quickQuestions = [
-  "我应该如何开始健身计划？",
-  "请推荐一些健康的减重食谱",
-  "如何保持运动的持续性？",
-  "我的BMI指数正常吗？",
-  "推荐一些居家运动方式"
-]
+const quickQuestions = ["我的BMI指数正常吗？"];
 
 const useQuickQuestion = (question: string) => {
-  inputMessage.value = question
-  sendMessage()
-}
+  inputMessage.value = question;
+  sendMessage();
+};
 
 const scrollToBottom = () => {
-  if (!shouldAutoScroll.value) return
+  if (!shouldAutoScroll.value) return;
   nextTick(() => {
     if (chatContainer.value) {
-      chatContainer.value.scrollTop = chatContainer.value.scrollHeight
+      chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
     }
-  })
-}
+  });
+};
 
 const handleScroll = () => {
-  if (!chatContainer.value) return
-  const { scrollTop, scrollHeight, clientHeight } = chatContainer.value
-  shouldAutoScroll.value = scrollHeight - scrollTop - clientHeight < 20
-}
+  if (!chatContainer.value) return;
+  const { scrollTop, scrollHeight, clientHeight } = chatContainer.value;
+  shouldAutoScroll.value = scrollHeight - scrollTop - clientHeight < 20;
+};
 
 onMounted(() => {
   if (props.userProfile) {
     messages.value.push({
-      role: 'assistant',
+      role: "assistant",
       content: `### 👋 你好！我是你的健康小管家
 
 根据您的个人信息，我为您提供专属服务：
@@ -170,82 +206,120 @@ onMounted(() => {
 - 科学饮食指导
 - 健康生活建议
 
-请随时询问任何关于健康、运动或饮食的问题！`
-    })
+请随时询问任何关于健康、运动或饮食的问题！`,
+    });
   }
-  chatContainer.value?.addEventListener('scroll', handleScroll)
-})
+  chatContainer.value?.addEventListener("scroll", handleScroll);
+});
 
 onUnmounted(() => {
-  chatContainer.value?.removeEventListener('scroll', handleScroll)
-})
+  chatContainer.value?.removeEventListener("scroll", handleScroll);
+});
 
 const renderMarkdown = (text: string) => {
-  return md.render(text)
-}
+  return md.render(text);
+};
 
 const typeMessage = async (text: string) => {
-  isTyping.value = true
-  displayText.value = ''
-  renderedText.value = ''
-  
+  isTyping.value = true;
+  displayText.value = "";
+  renderedText.value = "";
+
   for (let i = 0; i < text.length; i++) {
-    displayText.value += text[i]
-    renderedText.value = renderMarkdown(displayText.value)
-    scrollToBottom()
-    await new Promise(resolve => setTimeout(resolve, 30))
+    displayText.value += text[i];
+    renderedText.value = renderMarkdown(displayText.value);
+    scrollToBottom();
+    await new Promise((resolve) => setTimeout(resolve, 30));
   }
-  
-  isTyping.value = false
-}
 
+  isTyping.value = false;
+};
+
+// 在 sendMessage 方法中修改
 const sendMessage = async () => {
-  if (!inputMessage.value.trim() || isLoading.value) return
+  if (!inputMessage.value.trim() || isLoading.value) return;
 
-  const userMessage = inputMessage.value
+  const userMessage = inputMessage.value;
   messages.value.push({
-    role: 'user',
-    content: userMessage
-  })
-  scrollToBottom()
+    role: "user",
+    content: userMessage,
+  });
+  scrollToBottom();
 
-  isLoading.value = true
-  inputMessage.value = ''
-  
+  isLoading.value = true;
+  inputMessage.value = "";
+
   try {
-    const response: any = await $fetch('/api/health-plan', {
-      method: 'POST',
-      body: {
+    const response = await fetch("/api/health-plan", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         profile: props.userProfile,
         message: userMessage,
-        history: messages.value.slice(-6)
+        history: messages.value.slice(-6),
+      }),
+    });
+
+    if (!response.ok) throw new Error(response.statusText);
+
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error("No reader available");
+
+    // 添加新的 AI 消息
+    messages.value.push({
+      role: "assistant",
+      content: "",
+    });
+
+    const decoder = new TextDecoder();
+    isTyping.value = true;
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const chunk = decoder.decode(value);
+      const lines = chunk.split("\n").filter((line) => line.trim() !== "");
+
+      for (const line of lines) {
+        if (line.startsWith("data: ")) {
+          const data = line.slice(5);
+          if (data === "[DONE]") continue;
+
+          try {
+            const parsed = JSON.parse(data);
+            const content = parsed.choices[0]?.delta?.content || "";
+            const lastMessage = messages.value[messages.value.length - 1];
+            lastMessage.content += content;
+            renderedText.value = renderMarkdown(lastMessage.content);
+            scrollToBottom();
+          } catch (e) {
+            console.error("Error parsing chunk:", e);
+          }
+        }
       }
-    })
-    
-    if (response.code === 200) {
-      const aiMessage:any = {
-        role: 'assistant',
-        content: response.data?.content
-      }
-      messages.value.push(aiMessage)
-      await typeMessage(aiMessage.content)
-    } else {
-      throw new Error(response.message)
     }
   } catch (error) {
-    console.error('Error:', error)
+    console.error("Error:", error);
     messages.value.push({
-      role: 'assistant',
-      content: '抱歉，发生了错误。请稍后重试。'
-    })
+      role: "assistant",
+      content: "抱歉，发生了错误。请稍后重试。",
+    });
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
+    isTyping.value = false;
   }
-}
+};
 
-watch(messages, () => {
-  scrollToBottom()
-}, { deep: true })
+watch(
+  messages,
+  () => {
+    scrollToBottom();
+  },
+  { deep: true }
+);
 </script>
 
 <style>
@@ -282,8 +356,13 @@ watch(messages, () => {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 /* 滚动条美化 */

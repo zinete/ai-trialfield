@@ -1,27 +1,28 @@
 <template>
-  <div class="flex flex-col h-screen ">
-
+  <div class="flex flex-col h-screen">
     <!-- 聊天记录区域 -->
     <div ref="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-4">
-      <div v-for="(message, index) in messages" :key="index" 
-           class="flex flex-col space-y-2">
+      <div
+        v-for="(message, index) in messages"
+        :key="index"
+        class="flex flex-col space-y-2"
+      >
         <!-- 用户消息 -->
-        <div v-if="message.role === 'user'" 
-             class="flex justify-end">
+        <div v-if="message.role === 'user'" class="flex justify-end">
           <div class="bg-emerald-500 text-white p-3 rounded-lg max-w-[80%]">
             {{ message.content }}
           </div>
         </div>
-          <!-- AI 回复 -->
-          <div v-else class="flex justify-start">
-            <div class="bg-white p-3 rounded-lg shadow max-w-[80%] markdown-body">
-              <span v-if="index === messages.length - 1 && isTyping">
-                <span v-html="renderedText"></span>
-                <span class="animate-pulse">▋</span>
-              </span>
-              <span v-else v-html="renderMarkdown(message.content)"></span>
-            </div>
+        <!-- AI 回复 -->
+        <div v-else class="flex justify-start">
+          <div class="bg-white p-3 rounded-lg shadow max-w-[80%] markdown-body">
+            <span v-if="index === messages.length - 1 && isTyping">
+              <span v-html="renderedText"></span>
+              <span class="animate-pulse">▋</span>
+            </span>
+            <span v-else v-html="renderMarkdown(message.content)"></span>
           </div>
+        </div>
       </div>
     </div>
 
@@ -40,7 +41,7 @@
           :disabled="isLoading"
           class="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 disabled:opacity-50"
         >
-          {{ isLoading ? '发送中...' : '发送' }}
+          {{ isLoading ? "发送中..." : "发送" }}
         </button>
       </div>
     </div>
@@ -49,114 +50,145 @@
 
 <script setup lang="ts">
 // @ts-ignore 暂时忽略类型检查，后续需要安装 @types/markdown-it
-import MarkdownIt from 'markdown-it'
-import hljs from 'highlight.js'
-import 'highlight.js/styles/github.css'
+import MarkdownIt from "markdown-it";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css";
 
 // 初始化 markdown-it
 const md = new MarkdownIt({
   highlight: function (str: string, lang: string) {
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return `<pre class="hljs"><code>${hljs.highlight(str, { language: lang, ignoreIllegals: true }).value}</code></pre>`
+        return `<pre class="hljs"><code>${
+          hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
+        }</code></pre>`;
       } catch (__) {}
     }
-    return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`
+    return `<pre class="hljs"><code>${md.utils.escapeHtml(str)}</code></pre>`;
   },
   breaks: true,
-  linkify: true
-})
+  linkify: true,
+});
 
 interface Message {
-  role: 'user' | 'assistant'
-  content: string
+  role: "user" | "assistant";
+  content: string;
+  isDeepThinking?: boolean;
 }
 
-const messages = ref<Message[]>([])
-const inputMessage = ref('')
-const isLoading = ref(false)
-const isTyping = ref(false)
-const displayText = ref('')
-const chatContainer = ref<HTMLElement | null>(null)
+const messages = ref<Message[]>([]);
+const inputMessage = ref("");
+const isLoading = ref(false);
+const isTyping = ref(false);
+const displayText = ref("");
+const chatContainer = ref<HTMLElement | null>(null);
+const isDeepThinking = ref(false);
 
 // 自动滚动到底部
 const scrollToBottom = () => {
   nextTick(() => {
     if (chatContainer.value) {
-      chatContainer.value.scrollTop = chatContainer.value.scrollHeight
+      chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
     }
-  })
-}
+  });
+};
 
-const renderedText = ref('')
+const renderedText = ref("");
 
 const renderMarkdown = (text: string) => {
-  return md.render(text)
-}
+  return md.render(text);
+};
 
 // 修改打字机效果
 const typeMessage = async (text: string) => {
-  isTyping.value = true
-  displayText.value = ''
-  renderedText.value = ''
-  
+  isTyping.value = true;
+  displayText.value = "";
+  renderedText.value = "";
+
   for (let i = 0; i < text.length; i++) {
-    displayText.value += text[i]
-    renderedText.value = renderMarkdown(displayText.value)
-    scrollToBottom()
-    await new Promise(resolve => setTimeout(resolve, 50))
+    displayText.value += text[i];
+    renderedText.value = renderMarkdown(displayText.value);
+    scrollToBottom();
+    await new Promise((resolve) => setTimeout(resolve, 50));
   }
-  
-  isTyping.value = false
-}
+
+  isTyping.value = false;
+};
 
 // 在 sendMessage 函数中修改 API 调用部分
 const sendMessage = async () => {
-  if (!inputMessage.value.trim() || isLoading.value) return
+  if (!inputMessage.value.trim() || isLoading.value) return;
 
-  // 添加用户消息
+  const userMessage = inputMessage.value;
   messages.value.push({
-    role: 'user',
-    content: inputMessage.value
-  })
-  scrollToBottom()
+    role: "user",
+    content: userMessage,
+  });
+  scrollToBottom();
+  inputMessage.value = "";
+  isLoading.value = true;
 
-  isLoading.value = true
   try {
-    // 修改 API 调用，添加历史消息
-    const { data } = await useFetch(`/api/ollama-chat/${encodeURIComponent(inputMessage.value)}`, {
-      method: 'POST',
-      body: {
-        history: messages.value
+    const response = await fetch(
+      `/api/ollama-chat/${encodeURIComponent(userMessage)}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          history: messages.value,
+          isDeepThinking: isDeepThinking.value,
+        }),
       }
-    })
-    
-    // 添加 AI 回复
-    const aiMessage = {
-      role: 'assistant',
-      content: data.value?.data?.message?.content || '抱歉，我现在无法回答。'
-    } as Message
-    messages.value.push(aiMessage)
-    
-    // 开始打字机效果
-    await typeMessage(aiMessage.content)
-    
-  } catch (error) {
-    console.error('Error:', error)
+    );
+
+    if (!response.ok) throw new Error(response.statusText);
+
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error("No reader available");
+
     messages.value.push({
-      role: 'assistant',
-      content: '抱歉，发生了错误。'
-    })
+      role: "assistant",
+      content: "",
+      isDeepThinking: isDeepThinking.value,
+    });
+
+    isTyping.value = true;
+    let fullResponse = "";
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const text = new TextDecoder().decode(value);
+      fullResponse += text;
+
+      const lastMessage = messages.value[messages.value.length - 1];
+      lastMessage.content = fullResponse;
+      renderedText.value = renderMarkdown(fullResponse);
+      scrollToBottom();
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    messages.value.push({
+      role: "assistant",
+      content: "抱歉，发生了错误。",
+    });
   } finally {
-    isLoading.value = false
-    inputMessage.value = ''
+    isLoading.value = false;
+    isTyping.value = false;
   }
-}
+};
 
 // 监听消息变化，自动滚动
-watch(messages, () => {
-  scrollToBottom()
-}, { deep: true })
+watch(
+  messages,
+  () => {
+    scrollToBottom();
+  },
+  { deep: true }
+);
 </script>
 
 <style scoped>
@@ -165,8 +197,13 @@ watch(messages, () => {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 </style>
 <style>
@@ -196,7 +233,8 @@ watch(messages, () => {
   margin: 8px 0;
 }
 
-.markdown-body ul, .markdown-body ol {
+.markdown-body ul,
+.markdown-body ol {
   padding-left: 20px;
 }
 

@@ -1,5 +1,4 @@
 import axios from "axios";
-
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const axiosInstance = axios.create({
@@ -29,8 +28,7 @@ export default defineEventHandler(async (event) => {
       },
       {
         headers: {
-          Authorization:
-            "Bearer sk-fkjwfsdjtjysgxovxevnhjnocrjazkxfaqlwkcexbgitxljh",
+          Authorization: `Bearer ${config.apiKey}`,
           "Content-Type": "application/json",
         },
         responseType: "stream",

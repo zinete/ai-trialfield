@@ -264,40 +264,47 @@ const sendMessage = async () => {
 
     if (!response.ok) throw new Error(response.statusText);
 
-    const reader = response.body?.getReader();
-    if (!reader) throw new Error("No reader available");
-
     // 添加新的 AI 消息
     messages.value.push({
       role: "assistant",
       content: "",
     });
 
-    const decoder = new TextDecoder();
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error("No reader available");
+
     isTyping.value = true;
+    const decoder = new TextDecoder();
+    let buffer = ""; // 用于存储不完整的数据
 
     while (true) {
-      const { done, value } = await reader.read();
+      const { value, done } = await reader.read();
       if (done) break;
 
-      const chunk = decoder.decode(value);
-      const lines = chunk.split("\n").filter((line) => line.trim() !== "");
+      // 解码当前chunk并与之前的buffer合并
+      const chunk = decoder.decode(value, { stream: true });
+      buffer += chunk;
+
+      // 尝试处理完整的消息
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || ""; // 保存最后一个可能不完整的行
 
       for (const line of lines) {
-        if (line.startsWith("data: ")) {
-          const data = line.slice(5);
-          if (data === "[DONE]") continue;
+        if (line.trim() === "") continue;
+        if (!line.startsWith("data: ")) continue;
 
-          try {
-            const parsed = JSON.parse(data);
-            const content = parsed.choices[0]?.delta?.content || "";
-            const lastMessage = messages.value[messages.value.length - 1];
-            lastMessage.content += content;
-            renderedText.value = renderMarkdown(lastMessage.content);
-            scrollToBottom();
-          } catch (e) {
-            console.error("Error parsing chunk:", e);
-          }
+        const data = line.slice(5).trim();
+        if (data === "[DONE]") continue;
+
+        try {
+          const parsed = JSON.parse(data);
+          const content = parsed.response || ""; // 修改这里以匹配新的响应格式
+          const lastMessage = messages.value[messages.value.length - 1];
+          lastMessage.content += content;
+          renderedText.value = renderMarkdown(lastMessage.content);
+          scrollToBottom();
+        } catch (e) {
+          console.error("Error parsing JSON:", e);
         }
       }
     }

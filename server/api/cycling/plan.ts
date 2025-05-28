@@ -142,7 +142,7 @@ export default defineEventHandler(async (event) => {
     // 处理多条路线
     const routes = await Promise.all(
       (aiResponse.data.choices[0]?.message?.tool_calls || []).map(
-        async (toolCall) => {
+        async (toolCall: any) => {
           if (toolCall.function?.name === "generateCyclingRoute") {
             const routeData = JSON.parse(toolCall.function.arguments);
             const routePoints = await getRoutePoints(
@@ -213,7 +213,7 @@ async function getRoutePoints(startPoint: string, routeData: string) {
     const [origin, destination, ...waypointCoords] = await Promise.all([
       retryGeocode(startPoint),
       retryGeocode(waypoints[waypoints.length - 1]),
-      ...waypoints.slice(0, -1).map((point) => retryGeocode(point)),
+      ...waypoints.slice(0, -1).map((point: any) => retryGeocode(point)),
     ]);
 
     const params = new URLSearchParams({

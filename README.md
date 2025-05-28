@@ -1,4 +1,8 @@
-# Nuxt Minimal Starter
+# AI 试炼场
+
+> 部分链接
+
+[AI 健康小管家](https://net-status.nuxt.dev/fitness/ai-chat)
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 

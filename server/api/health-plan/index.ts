@@ -1,45 +1,28 @@
-import axios from "axios";
+/**
+ * @ Author: ZhengHui
+ * @ Create Time: 2025-04-01 13:31:44
+ * @ Modified by: ZhengHui
+ * @ Modified time: 2025-05-28 17:51:47
+ * @ Description:
+ */
+
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig();
-  const axiosInstance = axios.create({
-    timeout: 30000,
-    baseURL: config.apiBaseUrl,
-  });
   const { history } = await readBody(event);
-
-  // 模板 { content: "呼啦圈 2000个", frequency: "daily" },
-
-  let template = [{ content: "呼啦圈 2000个", frequency: "daily" }];
-
   try {
-    const res = await axiosInstance.post(
-      "/chat/completions",
+    const messages = [
       {
-        model: config.aiModel,
-        stream: true,
-        messages: [
-          {
-            role: "system",
-            content: `
-                        你是一个专业的健康顾问，你的任务是为用户提供个性化的健康建议。每次回答问题结尾，都需要带上 元宝AI😘随时为你提供服务 。`,
-          },
-          ...history,
-        ],
+        role: "system",
+        content: `你是一个专业的健康顾问，你的任务是为用户提供个性化的健康建议。每次回答问题结尾，都需要带上 元宝AI😘随时为你提供服务 。`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${config.apiKey}`,
-          "Content-Type": "application/json",
-        },
-        responseType: "stream",
-      }
-    );
+      ...history,
+    ];
+    const ai = hubAI();
+    const stream = await ai.run("@cf/qwen/qwen1.5-7b-chat-awq", {
+      stream: true,
+      messages,
+    });
 
-    setHeader(event, "Content-Type", "text/event-stream");
-    setHeader(event, "Cache-Control", "no-cache");
-    setHeader(event, "Connection", "keep-alive");
-
-    return sendStream(event, res.data);
+    return stream;
   } catch (error: any) {
     console.error("API调用错误:", error.message);
     return {

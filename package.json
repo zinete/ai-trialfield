@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
+    "@cloudflare/ai-utils": "^1.0.1",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
     "highlight.js": "^11.11.1",

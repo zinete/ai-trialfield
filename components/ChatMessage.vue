@@ -55,7 +55,7 @@
       <div class="flex flex-wrap gap-2">
         <TransitionGroup name="fade">
           <button
-            v-for="(question, index) in quickQuestions"
+            v-for="(question, index) in botConfig?.quickQuestions"
             :key="index"
             @click="useQuickQuestion(question)"
             class="text-xs px-4 py-2 rounded-full bg-gray-100 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200 transform hover:scale-105 active:scale-95"
@@ -127,9 +127,10 @@ import hljs from "highlight.js";
 import "highlight.js/styles/github.css";
 import "katex/dist/katex.min.css";
 import { ref, watch, nextTick } from "vue";
+import type { BotConfig } from "~/types/bot";
 
 const props = defineProps<{
-  userProfile?: any;
+  botConfig: BotConfig | null;
 }>();
 
 const md = new MarkdownIt({
@@ -157,12 +158,9 @@ const messages = ref<Message[]>([]);
 const inputMessage = ref("");
 const isLoading = ref(false);
 const isTyping = ref(false);
-const displayText = ref("");
 const chatContainer = ref<HTMLElement | null>(null);
 const renderedText = ref("");
 const shouldAutoScroll = ref(true);
-
-const quickQuestions = ["我的BMI指数正常吗？"];
 
 const useQuickQuestion = (question: string) => {
   inputMessage.value = question;
@@ -185,28 +183,10 @@ const handleScroll = () => {
 };
 
 onMounted(() => {
-  if (props.userProfile) {
+  if (props.botConfig) {
     messages.value.push({
       role: "assistant",
-      content: `### 👋 你好！我是你的健康小管家
-
-根据您的个人信息，我为您提供专属服务：
-
-📊 **基本信息**
-- 年龄：${props.userProfile.age}岁
-- 性别：${props.userProfile.gender}
-- 身高：${props.userProfile.height}cm
-- 体重：${props.userProfile.weight}kg
-
-🎯 **健康目标**：${props.userProfile.goal}
-💪 **当前活动水平**：${props.userProfile.activityLevel}
-
-我会为您提供专业的健康建议，包括：
-- 个性化运动计划
-- 科学饮食指导
-- 健康生活建议
-
-请随时询问任何关于健康、运动或饮食的问题！`,
+      content: props.botConfig.description,
     });
   }
   chatContainer.value?.addEventListener("scroll", handleScroll);
@@ -218,21 +198,6 @@ onUnmounted(() => {
 
 const renderMarkdown = (text: string) => {
   return md.render(text);
-};
-
-const typeMessage = async (text: string) => {
-  isTyping.value = true;
-  displayText.value = "";
-  renderedText.value = "";
-
-  for (let i = 0; i < text.length; i++) {
-    displayText.value += text[i];
-    renderedText.value = renderMarkdown(displayText.value);
-    scrollToBottom();
-    await new Promise((resolve) => setTimeout(resolve, 30));
-  }
-
-  isTyping.value = false;
 };
 
 // 在 sendMessage 方法中修改
@@ -250,15 +215,14 @@ const sendMessage = async () => {
   inputMessage.value = "";
 
   try {
-    const response = await fetch("/api/health-plan", {
+    const response = await fetch("/api/chat-gpt", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        profile: props.userProfile,
-        message: userMessage,
         history: messages.value.slice(-6),
+        systemPrompt: props.botConfig?.systemPrompt,
       }),
     });
 

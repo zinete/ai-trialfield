@@ -18,6 +18,7 @@ export default defineNuxtConfig({
   },
   hub: {
     ai: true,
+    database: true,
   },
   nitro: {
     preset: "cloudflare-pages",

@@ -11,58 +11,62 @@ export const frequencyRules = {
   // 周末执行的任务（周六和周日）
   weekend: (day: number) => day % 7 === 0 || day % 7 === 6,
   // 每周三次的任务（周一、周三、周五）
-  threeTimesPerWeek: (day: number) => [1, 3, 5].includes(day % 7)
-} as const
+  threeTimesPerWeek: (day: number) => [1, 3, 5].includes(day % 7),
+} as const;
 
 export interface TaskTemplate {
-  content: string
-  frequency: keyof typeof frequencyRules
+  content: string;
+  frequency: keyof typeof frequencyRules;
 }
 
 export interface Task {
-  content: string
-  completed: boolean
-  day: number
+  content: string;
+  completed: boolean;
+  day: number;
 }
 
-export function generateTasks(taskTemplates: TaskTemplate[], totalDays: number = 90) {
-  const tasks: Task[] = []
-  
+export function generateTasks(
+  taskTemplates: TaskTemplate[],
+  totalDays: number = 90
+) {
+  const tasks: Task[] = [];
+
   for (let day = 1; day <= totalDays; day++) {
     // 使用规则过滤当天应该执行的任务
     const dayTasks = taskTemplates
-      .filter(template => frequencyRules[template.frequency](day))
-      .map(template => ({
+      .filter((template) => frequencyRules[template.frequency](day))
+      .map((template) => ({
         content: template.content,
         completed: false,
-        day
-      }))
+        day,
+      }));
 
     // 确保每天至少有3个任务
-    const dailyTasks = taskTemplates.filter(t => t.frequency === 'daily')
+    const dailyTasks = taskTemplates.filter((t) => t.frequency === "daily");
     while (dayTasks.length < 3 && dailyTasks.length > 0) {
-      const task = dailyTasks[dayTasks.length % dailyTasks.length]
+      const task = dailyTasks[dayTasks.length % dailyTasks.length];
       dayTasks.push({
-        content: dayTasks.length >= dailyTasks.length 
-          ? `${task.content} (额外)` 
-          : task.content,
+        content:
+          dayTasks.length >= dailyTasks.length
+            ? `${task.content} (额外)`
+            : task.content,
         completed: false,
-        day
-      })
+        day,
+      });
     }
 
-    tasks.push(...dayTasks)
+    tasks.push(...dayTasks);
   }
-  
-  return tasks
+
+  return tasks;
 }
 export function calculateTargetDate(startDate: Date, days: number) {
-  const targetDate = new Date(startDate)
-  targetDate.setDate(targetDate.getDate() + days - 1) // 减1是因为开始日期算第一天
-  
-  return new Intl.DateTimeFormat('zh-CN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(targetDate)
+  const targetDate = new Date(startDate);
+  targetDate.setDate(targetDate.getDate() + days - 1); // 减1是因为开始日期算第一天
+
+  return new Intl.DateTimeFormat("zh-CN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(targetDate);
 }

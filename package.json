@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "clear": "nuxt cleanup"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",

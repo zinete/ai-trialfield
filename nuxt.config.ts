@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxtjs/tailwindcss", "@nuxthub/core"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxthub/core", "@nuxt/ui", "@pinia/nuxt"],
+  css: ["~/assets/css/main.css"],
   ssr: true,
   runtimeConfig: {
     apiKey: process.env.NUXT_API_KEY,
@@ -24,6 +25,7 @@ export default defineNuxtConfig({
     preset: "cloudflare-pages",
     experimental: {
       openAPI: true,
+      tasks: true,
     },
   },
   compatibilityDate: "2025-01-24",

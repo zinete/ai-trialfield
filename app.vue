@@ -1,15 +1,13 @@
 <template>
-  <div>
+  <UApp>
     <NuxtLayout>
-      <PixelBackground/>
+      <PixelBackground />
       <NuxtPage />
+      <NuxtLoadingIndicator />
     </NuxtLayout>
-  </div>
+  </UApp>
 </template>
 
 <script setup lang="ts">
-import PixelBackground from './components/PixelBackground.vue'
-useHead({
-  title: 'WebPulse | Status Check'
-})
+import PixelBackground from "./components/PixelBackground.vue";
 </script>

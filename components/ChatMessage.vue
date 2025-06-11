@@ -50,7 +50,7 @@
     </div>
 
     <!-- 输入区域 -->
-    <div class="border-t bg-white p-4 rounded-b-lg space-y-3">
+    <div class="bg-white p-4 rounded-b-lg space-y-3">
       <!-- 快捷问题区域 -->
       <div class="flex flex-wrap gap-2">
         <TransitionGroup name="fade">

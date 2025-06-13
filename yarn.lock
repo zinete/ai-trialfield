@@ -5502,6 +5502,16 @@ open@^8.0.0, open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
+overlayscrollbars-vue@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmmirror.com/overlayscrollbars-vue/-/overlayscrollbars-vue-0.5.9.tgz#bc0f51844aa0caab8556fcc874e82ddae1e4bc55"
+  integrity sha512-zZEcsb6llnKaRwXTP44E4RrmwuH+eAi70mgCdiiPwcPBE2H99Vs2V0q7sWnEanqU3462ch38e4SmIMnuH906DQ==
+
+overlayscrollbars@^2.11.4:
+  version "2.11.4"
+  resolved "https://registry.npmmirror.com/overlayscrollbars/-/overlayscrollbars-2.11.4.tgz#68a776731106f9f767d5b667fb2024127d282a94"
+  integrity sha512-GKYQo3OZ1QWnppNjQVv5hfpn+glYUxc6+ufW+ivdXUyLWFNc01XoH2Z36KGM4I8e5pXYeA3ElNItcXiLvmUhnQ==
+
 oxc-parser@^0.72.2:
   version "0.72.3"
   resolved "https://registry.npmmirror.com/oxc-parser/-/oxc-parser-0.72.3.tgz#1dead8d99d548970ab822ae05fa2244a47146935"

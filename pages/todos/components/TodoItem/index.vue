@@ -16,6 +16,7 @@
           v-if="deleteTodo"
           color="primary"
           variant="ghost"
+          class="cursor-pointer"
           icon="lucide:archive-x"
           @click="deleteTodo?.(todo)"
         />

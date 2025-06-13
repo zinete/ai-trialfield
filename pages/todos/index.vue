@@ -9,15 +9,16 @@
             color="primary"
             variant="ghost"
             icon="lucide:plus"
+            class="cursor-pointer"
             @click="open = true"
           />
-
           <template #content>
             <UCard>
               <template #header>
                 <div class="flex items-center justify-between">
-                  <h3 class="text-xl font-bold">新建任务</h3>
+                  <h3 class="text-xl font-bold">新增待办事项</h3>
                   <UButton
+                    class="cursor-pointer"
                     color="primary"
                     variant="ghost"
                     icon="i-lucide-x"
@@ -26,11 +27,11 @@
                 </div>
                 <div class="my-4 space-y-2.5">
                   <UInput
+                    icon="i-lucide-x"
                     v-model="fromValue.title"
-                    placeholder="请输入任务名称"
+                    placeholder="输入待办事项"
                     class="w-full"
                   />
-                  <USwitch placeholder="请输入任务名称" class="w-full" />
                 </div>
               </template>
               <template #footer>
@@ -39,9 +40,15 @@
                     color="primary"
                     variant="soft"
                     label="取消"
+                    class="cursor-pointer"
                     @click="open = false"
                   />
-                  <UButton color="primary" label="确定" @click="addTodo()" />
+                  <UButton
+                    color="primary"
+                    class="cursor-pointer"
+                    label="确定"
+                    @click="addTodo()"
+                  />
                 </div>
               </template>
             </UCard>
@@ -52,35 +59,49 @@
       <!-- 任务分类标签页 -->
       <UTabs :items="items">
         <template #todo-uncompleted>
-          <div
-            class="space-y-2 overflow-y-auto h-[calc(100vh-200px)] scroll-smooth p-1"
+          <ScrolllBarBody
+            :options="{
+              scrollbars: {
+                autoHide: 'leave',
+              },
+            }"
+            class="h-[calc(100vh-150px)] p-4"
           >
-            <TodoItem :todos="uncompletedTodos" :completed="completed" />
+            <div class="space-y-3">
+              <TodoItem :todos="uncompletedTodos" :completed="completed" />
+            </div>
             <div
               v-if="uncompletedTodos.length === 0"
               class="text-center text-gray-500 py-4"
             >
               暂无待办事项
             </div>
-          </div>
+          </ScrolllBarBody>
         </template>
 
         <template #todo-completed>
-          <div
-            class="space-y-2 overflow-y-auto h-[calc(100vh-200px)] scroll-smooth p-1"
+          <ScrolllBarBody
+            :options="{
+              scrollbars: {
+                autoHide: 'leave',
+              },
+            }"
+            class="h-[calc(100vh-150px)] p-4"
           >
-            <TodoItem
-              :todos="completedTodos"
-              :completed="completed"
-              :deleteTodo="deleteTodo"
-            />
+            <div class="space-y-3">
+              <TodoItem
+                :todos="completedTodos"
+                :completed="completed"
+                :deleteTodo="deleteTodo"
+              />
+            </div>
             <div
               v-if="completedTodos.length === 0"
               class="text-center text-gray-500 py-4"
             >
               暂无已完成事项
             </div>
-          </div>
+          </ScrolllBarBody>
         </template>
       </UTabs>
     </div>
@@ -93,6 +114,7 @@ import TodoItem from "./components/TodoItem/index.vue";
 import type { TabsItem } from "@nuxt/ui";
 const fromValue = ref({
   title: "",
+  time: null,
 });
 const open = ref(false);
 const toast = useToast();
@@ -109,6 +131,9 @@ const items = ref<TabsItem[]>([
   },
 ]);
 
+useHead({
+  title: "添加待办事项",
+});
 // 使用计算属性过滤待办事项
 const uncompletedTodos = computed(
   () => data.value?.filter((todo: any) => !todo.completed) || []
@@ -127,6 +152,7 @@ const addTodo = async () => {
     method: "POST",
     body: {
       title: fromValue.value.title,
+      time: fromValue.value.time,
     },
   });
   if (todo.id) {

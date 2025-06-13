@@ -5,6 +5,7 @@
 [AI 健康小管家](https://net-status.nuxt.dev/fitness/ai-chat)
 [多功能对话机器人](https://net-status.nuxt.dev/ai-chat)
 [TODO LIST](https://net-status.nuxt.dev/todos)
+[网址大全](https://net-status.nuxt.dev/sites)
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 

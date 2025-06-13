@@ -3,6 +3,9 @@ export default defineNuxtConfig({
   modules: ["@nuxtjs/tailwindcss", "@nuxthub/core", "@nuxt/ui", "@pinia/nuxt"],
   css: ["~/assets/css/main.css"],
   ssr: true,
+  ui: {
+    fonts: false,
+  },
   runtimeConfig: {
     apiKey: process.env.NUXT_API_KEY,
     apiBaseUrl: process.env.NUXT_API_BASE_URL,

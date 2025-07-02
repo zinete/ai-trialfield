@@ -1,5 +1,17 @@
 <template>
   <div class="container mx-auto min-h-screen xl:w-1/2 w-full p-4">
+    <div class="flex flex-row justify-between my-2" v-show="loggedIn">
+      <h3>欢迎 {{ user?.name }} 登录使用</h3>
+      <!-- {{ loggedIn }} -->
+      <UButton
+        variant="ghost"
+        class="cursor-pointer"
+        color="error"
+        icon="i-heroicons-arrow-right-on-rectangle"
+        @click="logout"
+        >退出</UButton
+      >
+    </div>
     <div class="flex flex-col space-y-4">
       <!-- 标题和添加按钮 -->
       <div class="flex items-center justify-between">
@@ -109,7 +121,10 @@
 </template>
 
 <script setup lang="ts">
-const { data, refresh } = useFetch("/api/todos");
+definePageMeta({
+  middleware: ["authenticated"],
+});
+const { data, refresh }: any = useFetch("/api/user/todos");
 import TodoItem from "./components/TodoItem/index.vue";
 import type { TabsItem } from "@nuxt/ui";
 const fromValue = ref({
@@ -131,6 +146,24 @@ const items = ref<TabsItem[]>([
   },
 ]);
 
+const {
+  user,
+  clear: clearSession,
+  loggedIn,
+  fetch: refreshSession,
+} = useUserSession();
+const route = useRoute();
+const router = useRouter();
+async function logout() {
+  await clearSession();
+  await refreshSession();
+  router.replace({
+    path: "login",
+    query: {
+      redirect: route.fullPath,
+    },
+  });
+}
 useHead({
   title: "添加待办事项",
 });
@@ -148,7 +181,7 @@ const addTodo = async () => {
   if (!fromValue.value.title) {
     return false;
   }
-  const todo = await $fetch("/api/todos", {
+  const todo = await $fetch("/api/user/todos", {
     method: "POST",
     body: {
       title: fromValue.value.title,
@@ -167,14 +200,14 @@ const addTodo = async () => {
 };
 
 const deleteTodo = async (item: any) => {
-  await $fetch(`/api/todos/${item?.id}`, {
+  await $fetch(`/api/user/todos/${item?.id}`, {
     method: "delete",
   });
   refresh();
 };
 
 const completed = async (item: any) => {
-  await $fetch(`/api/todos/${item?.id}`, {
+  await $fetch(`/api/user/todos/${item?.id}`, {
     method: "patch",
     body: {
       completed: item?.completed ? false : true,

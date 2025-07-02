@@ -11,3 +11,5 @@ export function useDrizzle() {
 
 export type Todos = typeof schema.todos.$inferSelect;
 export type Sites = typeof schema.sites.$inferSelect;
+export type Users = typeof schema.users.$inferSelect;
+export type Tags = typeof schema.tags.$inferSelect;

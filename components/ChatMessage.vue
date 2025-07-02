@@ -215,7 +215,7 @@ const sendMessage = async () => {
   inputMessage.value = "";
 
   try {
-    const response = await fetch("/api/chat-gpt", {
+    const response = await fetch("/api/user/chat-gpt", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

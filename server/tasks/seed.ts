@@ -13,21 +13,26 @@ export default defineTask({
         createdAt: new Date(),
         updatedAt: new Date(),
         completed: true,
+        userId: null,
+        tag: null,
       },
       {
         title: "看电影",
         createdAt: new Date(),
         updatedAt: new Date(),
         completed: false,
+        userId: null,
+        tag: null,
       },
     ];
     const sites = [
       {
-        title: "baidu",
+        name: "baidu",
         url: "https://www.baidu.com",
-        icon: "https://www.baidu.com/favicon.ico",
+        favicon: "https://www.baidu.com/favicon.ico",
         createdAt: new Date(),
         updatedAt: new Date(),
+        status: "active",
       },
     ];
     await useDrizzle().insert(tables.todos).values(todos);

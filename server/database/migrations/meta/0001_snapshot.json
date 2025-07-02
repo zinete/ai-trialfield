@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "452eecaf-3233-4b9b-91a0-3021e60962cb",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "03ae2dc0-1e78-430c-99cf-76764b266c1c",
+  "prevId": "452eecaf-3233-4b9b-91a0-3021e60962cb",
   "tables": {
     "sites": {
       "name": "sites",
@@ -62,7 +62,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-07-01T02:18:49.683Z\"'"
+          "default": "'\"2025-07-01T04:37:27.612Z\"'"
         },
         "updated_at": {
           "name": "updated_at",
@@ -70,7 +70,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-07-01T02:18:49.683Z\"'"
+          "default": "'\"2025-07-01T04:37:27.612Z\"'"
         }
       },
       "indexes": {},
@@ -116,7 +116,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-07-01T02:18:49.683Z\"'"
+          "default": "'\"2025-07-01T04:37:27.613Z\"'"
         },
         "updated_at": {
           "name": "updated_at",
@@ -124,7 +124,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-07-01T02:18:49.683Z\"'"
+          "default": "'\"2025-07-01T04:37:27.613Z\"'"
         }
       },
       "indexes": {
@@ -186,7 +186,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-07-01T02:18:49.682Z\"'"
+          "default": "'\"2025-07-01T04:37:27.611Z\"'"
         },
         "updated_at": {
           "name": "updated_at",
@@ -194,7 +194,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-07-01T02:18:49.682Z\"'"
+          "default": "'\"2025-07-01T04:37:27.611Z\"'"
         }
       },
       "indexes": {},
@@ -233,7 +233,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "'\"2025-07-01T02:18:49.683Z\"'"
+          "default": "'\"2025-07-01T04:37:27.612Z\"'"
         }
       },
       "indexes": {

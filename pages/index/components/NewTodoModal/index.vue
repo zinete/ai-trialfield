@@ -26,6 +26,15 @@
               placeholder="请选择图标"
               :items="props.tags"
               class="w-full"
+              required
+            />
+          </UFormField>
+          <UFormField label="截止时间" name="time">
+            <UInput
+              v-model="form.time"
+              type="date"
+              placeholder="请选择任务截止时间"
+              class="w-full"
             />
           </UFormField>
           <UButton type="submit" block color="primary">提交</UButton>
@@ -40,6 +49,7 @@ import { ref } from "vue";
 
 export interface NewTodoForm {
   title: string;
+  time: string;
   tags: any;
 }
 
@@ -47,6 +57,7 @@ const open = ref(false);
 const form = ref<NewTodoForm>({
   title: "",
   tags: "",
+  time: "",
 });
 const props = defineProps<{
   tags: any;
@@ -59,10 +70,12 @@ function handleSubmit() {
   emit("submit", {
     title: form.value.title,
     tags: form.value.tags,
+    time: form.value.time,
   });
   form.value = {
     title: "",
     tags: "",
+    time: "",
   };
   open.value = false;
 }

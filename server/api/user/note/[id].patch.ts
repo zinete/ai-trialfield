@@ -2,7 +2,7 @@
  * @ Author: ZhengHui
  * @ Create Time: 2025-06-10 17:59:28
  * @ Modified by: ZhengHui
- * @ Modified time: 2025-10-16 16:16:44
+ * @ Modified time: 2025-12-28 13:15:52
  * @ Description:
  */
 
@@ -11,6 +11,7 @@ export default eventHandler(async (event) => {
 
   const { completed } = await readBody(event);
   const { user }: any = await requireUserSession(event);
+
   const todo = await useDrizzle()
     .select()
     .from(tables.notes)
@@ -26,6 +27,12 @@ export default eventHandler(async (event) => {
       message: "无权操作他人的数据",
     });
   }
+
+  // 构建更新对象，只更新提供的字段
+  const updateData: any = {
+    updatedAt: new Date(),
+  };
+
   const updated = await useDrizzle()
     .update(tables.notes)
     .set({ completed, updatedAt: new Date() })

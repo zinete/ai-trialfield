@@ -1,5 +1,5 @@
 // 扩展 nuxt-auth-utils 的用户会话类型
-declare module '#auth-utils' {
+declare module "#auth-utils" {
   interface User {
     id: number;
     name: string;
@@ -10,4 +10,4 @@ declare module '#auth-utils' {
   }
 }
 
-export {}
+export {};

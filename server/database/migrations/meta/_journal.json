@@ -15,6 +15,13 @@
       "when": 1751344647629,
       "tag": "0001_glossy_blacklash",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1752040504176,
+      "tag": "0002_lovely_legion",
+      "breakpoints": true
     }
   ]
 }

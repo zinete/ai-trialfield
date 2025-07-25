@@ -14,9 +14,12 @@ export const todos = sqliteTable("todos", {
   userId: integer("userId", {
     mode: "number",
   }),
-  tags: text("tags"),
+  tagId: integer("tagId", {
+    mode: "number",
+  }),
   title: text("title").notNull(),
   completed: integer("completed", { mode: "boolean" }).notNull().default(false),
+  deadline: integer("deadline", { mode: "timestamp" }),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .default(new Date()),
@@ -31,7 +34,6 @@ export const sites = sqliteTable("sites", {
   url: text("url").notNull(),
   favicon: text("favicon").notNull(),
   status: text("status").notNull(),
-  //
   desc: text("desc"),
   sort: integer("sort"),
   lastCheck: integer("created_at", { mode: "timestamp" })

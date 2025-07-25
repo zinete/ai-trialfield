@@ -36,16 +36,11 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-
-export interface NewTagForm {
-  key: {
-    label: string;
-    icon: string;
-  };
-  name: string;
-}
+import type { NewTagForm } from "~/types";
 
 const open = ref(false);
+
+const route = useRoute();
 const form = ref<NewTagForm>({
   key: {
     label: "",
@@ -80,13 +75,23 @@ function handleSubmit() {
     name: form.value.name,
     key: form.value.key,
   });
+  debugger;
   form.value = {
     key: {
-      label: "",
       icon: "",
+      label: "",
     },
     name: "",
   };
   open.value = false;
 }
+
+// 暴露方法给父组件使用
+function openModal() {
+  open.value = true;
+}
+
+defineExpose({
+  openModal,
+});
 </script>

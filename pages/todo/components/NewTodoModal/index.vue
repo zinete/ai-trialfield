@@ -16,25 +16,28 @@
             />
           </UFormField>
 
-          <UFormField label="任务分类" name="icon">
+          <UFormField label="任务分类" name="tagId">
             <USelectMenu
-              v-model="form.tags"
+              v-model="form.tagId"
               :search-input="{
                 placeholder: 'Filter...',
                 icon: 'i-lucide-search',
               }"
-              placeholder="请选择图标"
+              placeholder="请选择标签"
               :items="props.tags"
+              value-key="id"
+              label-key="name"
               class="w-full"
               required
             />
           </UFormField>
-          <UFormField label="截止时间" name="time">
+          <UFormField label="截止时间" name="deadline">
             <UInput
-              v-model="form.time"
+              v-model="form.deadline"
               type="date"
               placeholder="请选择任务截止时间"
               class="w-full"
+              required
             />
           </UFormField>
           <UButton type="submit" block color="primary">提交</UButton>
@@ -46,18 +49,13 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-
-export interface NewTodoForm {
-  title: string;
-  time: string;
-  tags: any;
-}
+import type { NewTodoForm } from "~/types";
 
 const open = ref(false);
 const form = ref<NewTodoForm>({
-  title: "",
-  tags: "",
-  time: "",
+  title: undefined,
+  tagId: undefined,
+  deadline: undefined,
 });
 const props = defineProps<{
   tags: any;
@@ -69,13 +67,13 @@ const emit = defineEmits<{
 function handleSubmit() {
   emit("submit", {
     title: form.value.title,
-    tags: form.value.tags,
-    time: form.value.time,
+    tagId: form.value.tagId,
+    deadline: form.value.deadline,
   });
   form.value = {
-    title: "",
-    tags: "",
-    time: "",
+    title: undefined,
+    tagId: undefined,
+    deadline: undefined,
   };
   open.value = false;
 }

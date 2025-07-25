@@ -1,6 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxtjs/tailwindcss", "@nuxthub/core", "@nuxt/ui", "@pinia/nuxt", "nuxt-auth-utils"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@nuxthub/core",
+    "@nuxt/ui",
+    "@pinia/nuxt",
+    "nuxt-auth-utils",
+  ],
   css: ["~/assets/css/main.css"],
   ssr: true,
   ui: {

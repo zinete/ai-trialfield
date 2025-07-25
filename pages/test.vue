@@ -15,7 +15,7 @@ onMounted(async () => {
       version: "1.1",
       plugins: ["overlay/SimpleMarker"],
     },
-    // plugins: ["AMap.Driving", "AMap.ToolBar", "AMap.Scale"],
+    plugins: ["AMap.Driving", "AMap.ToolBar", "AMap.Scale"],
   }).then((AMap) => {
     let map = new AMap.Map("container", {
       zoom: 13,

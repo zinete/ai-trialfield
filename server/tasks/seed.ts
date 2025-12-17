@@ -35,7 +35,7 @@ export default defineTask({
         status: "active",
       },
     ];
-    await useDrizzle().insert(tables.todos).values(todos);
+    await useDrizzle().insert(tables.notes).values(todos);
     await useDrizzle().insert(tables.sites).values(sites);
     return { result: "success" };
   },

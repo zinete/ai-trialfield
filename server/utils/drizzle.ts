@@ -10,7 +10,6 @@ export function useDrizzle() {
 }
 
 // 重新导出类型以保持兼容性
-export type Todos = typeof schema.todos.$inferSelect;
+export type Notes = typeof schema.notes.$inferSelect;
 export type Sites = typeof schema.sites.$inferSelect;
 export type Users = typeof schema.users.$inferSelect;
-export type Tags = typeof schema.tags.$inferSelect;

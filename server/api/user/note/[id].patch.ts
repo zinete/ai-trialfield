@@ -2,18 +2,19 @@
  * @ Author: ZhengHui
  * @ Create Time: 2025-06-10 17:59:28
  * @ Modified by: ZhengHui
- * @ Modified time: 2025-06-30 16:31:02
+ * @ Modified time: 2025-10-16 16:16:44
  * @ Description:
  */
 
 export default eventHandler(async (event) => {
   const { id } = getRouterParams(event);
+
   const { completed } = await readBody(event);
   const { user }: any = await requireUserSession(event);
   const todo = await useDrizzle()
     .select()
-    .from(tables.todos)
-    .where(eq(tables.todos.id, Number(id)))
+    .from(tables.notes)
+    .where(eq(tables.notes.id, Number(id)))
     .get();
 
   if (!todo) {
@@ -26,9 +27,9 @@ export default eventHandler(async (event) => {
     });
   }
   const updated = await useDrizzle()
-    .update(tables.todos)
+    .update(tables.notes)
     .set({ completed, updatedAt: new Date() })
-    .where(eq(tables.todos.id, Number(id)))
+    .where(eq(tables.notes.id, Number(id)))
     .returning()
     .get();
 

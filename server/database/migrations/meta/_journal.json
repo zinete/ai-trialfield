@@ -22,6 +22,20 @@
       "when": 1752040504176,
       "tag": "0002_lovely_legion",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1760601719620,
+      "tag": "0003_pink_redwing",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1760601733763,
+      "tag": "0004_late_vision",
+      "breakpoints": true
     }
   ]
 }

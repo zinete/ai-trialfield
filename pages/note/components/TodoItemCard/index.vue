@@ -24,22 +24,7 @@
           >
             {{ todo.title }}
           </div>
-          
-          <!-- 标签显示 -->
-          <div v-if="todo.tag" class="flex items-center gap-2 mt-1">
-            <UBadge 
-              :color="'primary'" 
-              variant="soft"
-              size="xs"
-            >
-              <UIcon 
-                v-if="todo.tag.icon" 
-                :name="todo.tag.icon" 
-                class="w-3 h-3 mr-1"
-              />
-              {{ todo.tag.name }}
-            </UBadge>
-          </div>
+     
           
           <!-- 时间信息 -->
           <div class="flex items-center gap-3 mt-2 text-xs ">
@@ -88,7 +73,7 @@
             variant="ghost"
             size="sm"
             icon="i-lucide-more-vertical"
-            class="hover:bg-gray-50"
+            class="hover:"
           />
         </UDropdown>
       </div>
@@ -118,20 +103,18 @@
 </template>
 
 <script setup lang="ts">
-import type { Todos } from "~/server/utils/drizzle";
-import type { TodoWithTag } from "~/types";
 
-;
+
 
 interface Props {
-  todo: TodoWithTag;
+  todo: Notes;
   showDetails?: boolean;
 }
 
 interface Emits {
-  (e: 'toggle-complete', todo: TodoWithTag): void;
-  (e: 'delete', todo: TodoWithTag): void;
-  (e: 'edit', todo: TodoWithTag): void;
+  (e: 'toggle-complete', todo: Notes): void;
+  (e: 'delete', todo: Notes): void;
+  (e: 'edit', todo: Notes): void;
 }
 
 const props = withDefaults(defineProps<Props>(), {

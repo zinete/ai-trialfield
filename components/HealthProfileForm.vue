@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+  <div class="p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
     <div class="text-center mb-8">
       <h2 class="text-2xl font-bold text-gray-800">开启您的健康之旅</h2>
       <p class="text-gray-600 mt-2">

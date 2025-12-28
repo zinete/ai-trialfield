@@ -12,14 +12,14 @@ export default defineNuxtConfig({
   ui: {
     fonts: false,
   },
-  runtimeConfig: {
-    apiKey: process.env.NUXT_API_KEY,
-    apiBaseUrl: process.env.NUXT_API_BASE_URL,
-    aiModel: process.env.NUXT_AI_MODEL,
-    public: {
-      aiModel: process.env.NUXT_AI_MODEL,
-    },
-  },
+  // runtimeConfig: {
+  //   apiKey: process.env.NUXT_API_KEY,
+  //   apiBaseUrl: process.env.NUXT_API_BASE_URL,
+  //   aiModel: process.env.NUXT_AI_MODEL,
+  //   public: {
+  //     aiModel: process.env.NUXT_AI_MODEL,
+  //   },
+  // },
   app: {
     head: {
       viewport:

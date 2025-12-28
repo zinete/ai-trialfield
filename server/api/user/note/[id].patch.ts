@@ -2,18 +2,20 @@
  * @ Author: ZhengHui
  * @ Create Time: 2025-06-10 17:59:28
  * @ Modified by: ZhengHui
- * @ Modified time: 2025-06-30 16:31:02
+ * @ Modified time: 2025-12-28 13:15:52
  * @ Description:
  */
 
 export default eventHandler(async (event) => {
   const { id } = getRouterParams(event);
+
   const { completed } = await readBody(event);
   const { user }: any = await requireUserSession(event);
+
   const todo = await useDrizzle()
     .select()
-    .from(tables.todos)
-    .where(eq(tables.todos.id, Number(id)))
+    .from(tables.notes)
+    .where(eq(tables.notes.id, Number(id)))
     .get();
 
   if (!todo) {
@@ -25,10 +27,16 @@ export default eventHandler(async (event) => {
       message: "无权操作他人的数据",
     });
   }
+
+  // 构建更新对象，只更新提供的字段
+  const updateData: any = {
+    updatedAt: new Date(),
+  };
+
   const updated = await useDrizzle()
-    .update(tables.todos)
+    .update(tables.notes)
     .set({ completed, updatedAt: new Date() })
-    .where(eq(tables.todos.id, Number(id)))
+    .where(eq(tables.notes.id, Number(id)))
     .returning()
     .get();
 

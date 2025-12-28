@@ -10,16 +10,16 @@ export default defineEventHandler(async (event) => {
     // 查询总任务数
     db
       .select({ count: count() })
-      .from(tables.todos)
-      .where(eq(tables.todos.userId, user?.id))
+      .from(tables.notes)
+      .where(eq(tables.notes.userId, user?.id))
       .get(),
 
     // 查询已完成任务数
     db
       .select({ count: count() })
-      .from(tables.todos)
+      .from(tables.notes)
       .where(
-        and(eq(tables.todos.userId, user?.id), eq(tables.todos.completed, true))
+        and(eq(tables.notes.userId, user?.id), eq(tables.notes.completed, true))
       )
       .get(),
   ]);

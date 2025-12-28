@@ -5,7 +5,7 @@
       @plan-generated="handlePlanGenerated"
     />
     <div v-else class="space-y-6">
-      <div class="bg-white p-3 rounded-lg shadow-md">
+      <div class="p-3 rounded-lg shadow-md">
         <div class="flex flex-row items-center mb-4 w-full">
           <div
             class="flex flex-row items-center justify-between w-full mb-6 pb-4 border-b border-gray-200"
@@ -19,7 +19,7 @@
             </div>
             <button
               @click="restart"
-              class="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 rounded-md hover:bg-gray-50 transition-colors duration-200"
+              class="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 rounded-md hover: transition-colors duration-200"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

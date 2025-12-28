@@ -1,24 +1,24 @@
 <template>
   <div class="container mx-auto p-4 max-w-4xl">
     <template v-if="currentBot?.id">
-      <div class="bg-white p-3 rounded-lg shadow-md">
+      <div class="p-3 rounded-lg shadow-md">
         <div
           class="flex flex-row items-center justify-between w-full mb-6 pb-4 border-b border-gray-200"
         >
           <div class="flex items-center gap-2">
             <span class="text-2xl">{{ currentBot.avatar }}</span>
-            <h2 class="text-xl font-semibold text-gray-800">
+            <h2 class="text-xl font-semibold">
               {{ currentBot.title }}
             </h2>
             <span
               class="px-2 py-1 text-xs font-medium text-emerald-600 bg-emerald-50 rounded-full"
             >
-              {{ currentBot.status }}
+              测试模型、输出长度有限
             </span>
           </div>
           <NuxtLink
             to="/ai-chat"
-            class="flex items-center gap-1 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 rounded-md hover:bg-gray-50 transition-colors duration-200"
+            class="flex items-center gap-1 px-3 py-1.5 text-sm hover:text-gray-800 rounded-md hover: transition-colors duration-200"
           >
             更换机器人
           </NuxtLink>

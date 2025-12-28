@@ -73,7 +73,7 @@
             variant="ghost"
             size="sm"
             icon="i-lucide-more-vertical"
-            class="hover:bg-gray-50"
+            class="hover:"
           />
         </UDropdown>
       </div>

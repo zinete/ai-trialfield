@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-[calc(100vh-200px)] bg-gray-50 rounded-lg">
+  <div class="flex flex-col h-[calc(100vh-200px)] rounded-lg">
     <!-- 聊天记录区域 -->
     <div
       ref="chatContainer"
@@ -36,7 +36,7 @@
               🤖
             </div>
             <div
-              class="bg-white p-4 rounded-2xl rounded-tl-sm max-w-[80%] shadow-sm hover:shadow-md transition-all duration-200 markdown-body"
+              class="p-4 rounded-2xl rounded-tl-sm max-w-[80%] shadow-sm hover:shadow-md transition-all duration-200 markdown-body"
             >
               <span v-if="index === messages.length - 1 && isTyping">
                 <span v-html="renderedText"></span>
@@ -50,7 +50,7 @@
     </div>
 
     <!-- 输入区域 -->
-    <div class="bg-white p-4 rounded-b-lg space-y-3">
+    <div class="p-4 rounded-b-lg space-y-3">
       <!-- 快捷问题区域 -->
       <div class="flex flex-wrap gap-2">
         <TransitionGroup name="fade">
@@ -58,7 +58,7 @@
             v-for="(question, index) in botConfig?.quickQuestions"
             :key="index"
             @click="useQuickQuestion(question)"
-            class="text-xs px-4 py-2 rounded-full bg-gray-100 text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200 transform hover:scale-105 active:scale-95"
+            class="text-xs px-4 py-2 rounded-full bg-secondary-100 cursor-pointer text-gray-600 hover:bg-emerald-50 hover:text-emerald-600 transition-all duration-200 transform hover:scale-105 active:scale-95"
           >
             {{ question }}
           </button>
@@ -133,7 +133,7 @@ const props = defineProps<{
   botConfig: BotConfig | null;
 }>();
 
-const md = new MarkdownIt({
+const md: MarkdownIt = new MarkdownIt({
   highlight: function (str: string, lang: string) {
     if (lang && hljs.getLanguage(lang)) {
       try {
@@ -263,7 +263,7 @@ const sendMessage = async () => {
         try {
           const parsed = JSON.parse(data);
           const content = parsed.response || ""; // 修改这里以匹配新的响应格式
-          const lastMessage = messages.value[messages.value.length - 1];
+          const lastMessage = messages.value[messages.value.length - 1]!;
           lastMessage.content += content;
           renderedText.value = renderMarkdown(lastMessage.content);
           scrollToBottom();

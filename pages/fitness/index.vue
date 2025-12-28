@@ -245,7 +245,7 @@ const contributionData = computed(() => {
       }, 0) / persons.value.length;
 
     data.push({
-      date: dateStr,
+      date: dateStr!,
       progress: totalProgress,
     });
   }
